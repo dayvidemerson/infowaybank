@@ -26,12 +26,12 @@ public class BankResource {
 	private BankRepository bankRepository;
 
 	@GetMapping("/banks")
-	public List<Bank> retrieveAll() {
+	public List<Bank> findAll() {
 		return bankRepository.findAll();
 	}
 
 	@GetMapping("/banks/{id}")
-	public Bank retrieve(@PathVariable Long id) {
+	public Bank findById(@PathVariable Long id) {
 		Optional<Bank> bank = bankRepository.findById(id);
 
 		if (!bank.isPresent())
