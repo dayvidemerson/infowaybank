@@ -1,15 +1,21 @@
 package com.infowaybr.infowaybank.models;
 
+import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = -1474127204701870171L;
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 	private String name;
@@ -17,6 +23,9 @@ public class User {
 	private String username;
 
 	private String password;
+
+	@ManyToMany
+	private List<UserType> types;
 
 	public Long getId() {
 		return id;
@@ -48,5 +57,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<UserType> getTypes() {
+		return types;
+	}
+
+	public void setTypes(List<UserType> types) {
+		this.types = types;
 	}
 }
