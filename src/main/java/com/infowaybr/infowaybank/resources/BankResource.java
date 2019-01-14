@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,17 +21,18 @@ import com.infowaybr.infowaybank.models.Bank;
 import com.infowaybr.infowaybank.repositories.BankRepository;
 
 @RestController
+@RequestMapping("/api/banks")
 public class BankResource {
 
 	@Autowired
 	private BankRepository bankRepository;
 
-	@GetMapping("/banks")
+	@GetMapping
 	public List<Bank> findAll() {
 		return bankRepository.findAll();
 	}
 
-	@GetMapping("/banks/{id}")
+	@GetMapping("/{id}")
 	public Bank findById(@PathVariable Long id) {
 		Optional<Bank> bank = bankRepository.findById(id);
 
@@ -40,12 +42,12 @@ public class BankResource {
 		return bank.get();
 	}
 
-	@DeleteMapping("/banks/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable long id) {
 		bankRepository.deleteById(id);
 	}
 
-	@PostMapping("/banks")
+	@PostMapping
 	public ResponseEntity<Object> create(@RequestBody Bank bank) {
 		Bank saved= bankRepository.save(bank);
 
@@ -57,7 +59,7 @@ public class BankResource {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PutMapping("/banks/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
 
 		Optional<Bank> bankOptional = bankRepository.findById(id);
