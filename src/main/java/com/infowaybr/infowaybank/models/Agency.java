@@ -40,7 +40,7 @@ public class Agency implements Serializable {
 	private Integer number;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "bank_id", referencedColumnName = "id")
+	@JoinColumn(name = "bank_id")
 	private Bank bank;
 
 	@NotBlank

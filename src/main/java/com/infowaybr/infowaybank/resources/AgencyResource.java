@@ -1,13 +1,12 @@
 package com.infowaybr.infowaybank.resources;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.infowaybr.infowaybank.exceptions.AgencyNotFoundException;
 import com.infowaybr.infowaybank.models.Agency;
@@ -30,11 +29,13 @@ public class AgencyResource {
 	private AgencyRepository agencyRepository;
 
 	@GetMapping
+	@ResponseStatus( HttpStatus.OK )
 	public List<Agency> findAll() {
 		return agencyRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
+	@ResponseStatus( HttpStatus.OK )
 	public Agency findById(@PathVariable Long id) {
 		Optional<Agency> agency = agencyRepository.findById(id);
 
@@ -45,34 +46,28 @@ public class AgencyResource {
 	}
 
 	@DeleteMapping("/{id}")
+	@ResponseStatus( HttpStatus.OK )
 	public void delete(@PathVariable long id) {
 		agencyRepository.deleteById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@Valid @RequestBody Agency agency) {
-		Agency saved = agencyRepository.save(agency);
-		
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(saved.getId()).toUri();
-
-		return ResponseEntity.created(location).body(saved);
+	@ResponseStatus( HttpStatus.CREATED )
+	public Agency create(@Valid @RequestBody Agency agency) {
+		return agencyRepository.save(agency);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@Valid @RequestBody Agency agency, @PathVariable long id) {
+	@ResponseStatus( HttpStatus.OK )
+	public Agency update(@Valid @RequestBody Agency agency, @PathVariable long id) {
 
 		Optional<Agency> agencyOptional = agencyRepository.findById(id);
 
 		if (!agencyOptional.isPresent())
-			return ResponseEntity.notFound().build();
+			throw new AgencyNotFoundException();
 
 		agency.setId(id);
-		
-		agencyRepository.save(agency);
 
-		return ResponseEntity.ok(agency);
+		return agencyRepository.save(agency);
 	}
 }

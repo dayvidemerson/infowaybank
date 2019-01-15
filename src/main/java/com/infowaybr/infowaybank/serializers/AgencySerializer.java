@@ -8,11 +8,15 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.infowaybr.infowaybank.models.Agency;
 
 public class AgencySerializer extends JsonSerializer<Agency> {
-
+	
 	@Override
 	public void serialize(Agency value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
-		gen.writeNumberField("id", value.getId());
+		
+		if (value.getId() != null) {			
+			gen.writeNumberField("id", value.getId());
+		}
+
 		gen.writeNumberField("number", value.getNumber());
 		gen.writeNumberField("digit", value.getDigit());
 		gen.writeStringField("country", value.getCountry());
