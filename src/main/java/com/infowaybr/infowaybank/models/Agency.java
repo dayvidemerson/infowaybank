@@ -15,7 +15,14 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.infowaybr.infowaybank.serializers.AgencyDeserializer;
+import com.infowaybr.infowaybank.serializers.AgencySerializer;
+
 @Entity
+@JsonSerialize(using = AgencySerializer.class)
+@JsonDeserialize(using = AgencyDeserializer.class)
 public class Agency implements Serializable {
 
 	private static final long serialVersionUID = 7782384712441871304L;
