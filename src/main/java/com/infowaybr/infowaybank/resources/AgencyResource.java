@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
-import com.infowaybr.infowaybank.models.Bank;
-import com.infowaybr.infowaybank.repositories.BankRepository;
+import com.infowaybr.infowaybank.exceptions.AgencyNotFoundException;
+import com.infowaybr.infowaybank.models.Agency;
+import com.infowaybr.infowaybank.repositories.AgencyRepository;
 
 @RestController
-@RequestMapping("/api/banks")
-public class BankResource {
+@RequestMapping("/api/agencies")
+public class AgencyResource {
 
 	@Autowired
-	private BankRepository bankRepository;
+	private AgencyRepository agencyRepository;
 
 	@GetMapping
-	public List<Bank> findAll() {
-		return bankRepository.findAll();
+	public List<Agency> findAll() {
+		return agencyRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Bank findById(@PathVariable Long id) {
-		Optional<Bank> bank = bankRepository.findById(id);
+	public Agency findById(@PathVariable Long id) {
+		Optional<Agency> agency = agencyRepository.findById(id);
 
-		if (!bank.isPresent())
-			throw new BankNotFoundException();
+		if (!agency.isPresent())
+			throw new AgencyNotFoundException();
 
-		return bank.get();
+		return agency.get();
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable long id) {
-		bankRepository.deleteById(id);
+		agencyRepository.deleteById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Bank bank) {
-		Bank saved = bankRepository.save(bank);
+	public ResponseEntity<Object> create(@RequestBody Agency agency) {
+		Agency saved = agencyRepository.save(agency);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -60,16 +60,16 @@ public class BankResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
+	public ResponseEntity<Object> update(@RequestBody Agency agency, @PathVariable long id) {
 
-		Optional<Bank> bankOptional = bankRepository.findById(id);
+		Optional<Agency> agencyOptional = agencyRepository.findById(id);
 
-		if (!bankOptional.isPresent())
+		if (!agencyOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		bank.setId(id);
+		agency.setId(id);
 		
-		bankRepository.save(bank);
+		agencyRepository.save(agency);
 
 		return ResponseEntity.noContent().build();
 	}

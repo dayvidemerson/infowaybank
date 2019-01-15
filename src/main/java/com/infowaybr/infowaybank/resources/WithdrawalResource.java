@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
-import com.infowaybr.infowaybank.models.Bank;
-import com.infowaybr.infowaybank.repositories.BankRepository;
+import com.infowaybr.infowaybank.exceptions.WithdrawalNotFoundException;
+import com.infowaybr.infowaybank.models.Withdrawal;
+import com.infowaybr.infowaybank.repositories.WithdrawalRepository;
 
 @RestController
-@RequestMapping("/api/banks")
-public class BankResource {
+@RequestMapping("/api/withdrawals")
+public class WithdrawalResource {
 
 	@Autowired
-	private BankRepository bankRepository;
+	private WithdrawalRepository withdrawalRepository;
 
 	@GetMapping
-	public List<Bank> findAll() {
-		return bankRepository.findAll();
+	public List<Withdrawal> findAll() {
+		return withdrawalRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Bank findById(@PathVariable Long id) {
-		Optional<Bank> bank = bankRepository.findById(id);
+	public Withdrawal findById(@PathVariable Long id) {
+		Optional<Withdrawal> withdrawal = withdrawalRepository.findById(id);
 
-		if (!bank.isPresent())
-			throw new BankNotFoundException();
+		if (!withdrawal.isPresent())
+			throw new WithdrawalNotFoundException();
 
-		return bank.get();
+		return withdrawal.get();
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable long id) {
-		bankRepository.deleteById(id);
+		withdrawalRepository.deleteById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Bank bank) {
-		Bank saved = bankRepository.save(bank);
+	public ResponseEntity<Object> create(@RequestBody Withdrawal withdrawal) {
+		Withdrawal saved = withdrawalRepository.save(withdrawal);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -60,16 +60,16 @@ public class BankResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
+	public ResponseEntity<Object> update(@RequestBody Withdrawal withdrawal, @PathVariable long id) {
 
-		Optional<Bank> bankOptional = bankRepository.findById(id);
-
-		if (!bankOptional.isPresent())
+		Optional<Withdrawal> withdrawalOptional = withdrawalRepository.findById(id);
+		
+		if (!withdrawalOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		bank.setId(id);
+		withdrawal.setId(id);
 		
-		bankRepository.save(bank);
+		withdrawalRepository.save(withdrawal);
 
 		return ResponseEntity.noContent().build();
 	}

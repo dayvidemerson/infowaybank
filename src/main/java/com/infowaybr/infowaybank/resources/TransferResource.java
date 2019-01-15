@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
-import com.infowaybr.infowaybank.models.Bank;
-import com.infowaybr.infowaybank.repositories.BankRepository;
+import com.infowaybr.infowaybank.exceptions.TransferNotFoundException;
+import com.infowaybr.infowaybank.models.Transfer;
+import com.infowaybr.infowaybank.repositories.TransferRepository;
 
 @RestController
-@RequestMapping("/api/banks")
-public class BankResource {
+@RequestMapping("/api/transfers")
+public class TransferResource {
 
 	@Autowired
-	private BankRepository bankRepository;
+	private TransferRepository transferRepository;
 
 	@GetMapping
-	public List<Bank> findAll() {
-		return bankRepository.findAll();
+	public List<Transfer> findAll() {
+		return transferRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Bank findById(@PathVariable Long id) {
-		Optional<Bank> bank = bankRepository.findById(id);
+	public Transfer findById(@PathVariable Long id) {
+		Optional<Transfer> transfer = transferRepository.findById(id);
 
-		if (!bank.isPresent())
-			throw new BankNotFoundException();
+		if (!transfer.isPresent())
+			throw new TransferNotFoundException();
 
-		return bank.get();
+		return transfer.get();
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable long id) {
-		bankRepository.deleteById(id);
+		transferRepository.deleteById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Bank bank) {
-		Bank saved = bankRepository.save(bank);
+	public ResponseEntity<Object> create(@RequestBody Transfer transfer) {
+		Transfer saved = transferRepository.save(transfer);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -60,16 +60,16 @@ public class BankResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
+	public ResponseEntity<Object> update(@RequestBody Transfer transfer, @PathVariable long id) {
 
-		Optional<Bank> bankOptional = bankRepository.findById(id);
-
-		if (!bankOptional.isPresent())
+		Optional<Transfer> transferOptional = transferRepository.findById(id);
+		
+		if (!transferOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		bank.setId(id);
+		transfer.setId(id);
 		
-		bankRepository.save(bank);
+		transferRepository.save(transfer);
 
 		return ResponseEntity.noContent().build();
 	}

@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
-import com.infowaybr.infowaybank.models.Bank;
-import com.infowaybr.infowaybank.repositories.BankRepository;
+import com.infowaybr.infowaybank.exceptions.BankAccountNotFoundException;
+import com.infowaybr.infowaybank.models.BankAccount;
+import com.infowaybr.infowaybank.repositories.BankAccountRepository;
 
 @RestController
-@RequestMapping("/api/banks")
-public class BankResource {
+@RequestMapping("/api/bank-accounts")
+public class BankAccountResource {
 
 	@Autowired
-	private BankRepository bankRepository;
+	private BankAccountRepository bankAccountRepository;
 
 	@GetMapping
-	public List<Bank> findAll() {
-		return bankRepository.findAll();
+	public List<BankAccount> findAll() {
+		return bankAccountRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Bank findById(@PathVariable Long id) {
-		Optional<Bank> bank = bankRepository.findById(id);
+	public BankAccount findById(@PathVariable Long id) {
+		Optional<BankAccount> bankAccount = bankAccountRepository.findById(id);
 
-		if (!bank.isPresent())
-			throw new BankNotFoundException();
+		if (!bankAccount.isPresent())
+			throw new BankAccountNotFoundException();
 
-		return bank.get();
+		return bankAccount.get();
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable long id) {
-		bankRepository.deleteById(id);
+		bankAccountRepository.deleteById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Bank bank) {
-		Bank saved = bankRepository.save(bank);
+	public ResponseEntity<Object> create(@RequestBody BankAccount bankAccount) {
+		BankAccount saved = bankAccountRepository.save(bankAccount);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -60,16 +60,16 @@ public class BankResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
+	public ResponseEntity<Object> update(@RequestBody BankAccount bankAccount, @PathVariable long id) {
 
-		Optional<Bank> bankOptional = bankRepository.findById(id);
+		Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(id);
 
-		if (!bankOptional.isPresent())
+		if (!bankAccountOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		bank.setId(id);
+		bankAccount.setId(id);
 		
-		bankRepository.save(bank);
+		bankAccountRepository.save(bankAccount);
 
 		return ResponseEntity.noContent().build();
 	}

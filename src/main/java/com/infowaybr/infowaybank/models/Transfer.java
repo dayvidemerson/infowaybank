@@ -3,6 +3,7 @@ package com.infowaybr.infowaybank.models;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Positive;
 
+@Entity
 public class Transfer implements Serializable {
 
 	private static final long serialVersionUID = -727436324842220427L;

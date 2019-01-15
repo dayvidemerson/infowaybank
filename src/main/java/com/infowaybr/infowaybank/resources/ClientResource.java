@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
-import com.infowaybr.infowaybank.models.Bank;
-import com.infowaybr.infowaybank.repositories.BankRepository;
+import com.infowaybr.infowaybank.exceptions.ClientNotFoundException;
+import com.infowaybr.infowaybank.models.Client;
+import com.infowaybr.infowaybank.repositories.ClientRepository;
 
 @RestController
-@RequestMapping("/api/banks")
-public class BankResource {
+@RequestMapping("/api/clients")
+public class ClientResource {
 
 	@Autowired
-	private BankRepository bankRepository;
+	private ClientRepository clientRepository;
 
 	@GetMapping
-	public List<Bank> findAll() {
-		return bankRepository.findAll();
+	public List<Client> findAll() {
+		return clientRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Bank findById(@PathVariable Long id) {
-		Optional<Bank> bank = bankRepository.findById(id);
+	public Client findById(@PathVariable Long id) {
+		Optional<Client> client = clientRepository.findById(id);
 
-		if (!bank.isPresent())
-			throw new BankNotFoundException();
+		if (!client.isPresent())
+			throw new ClientNotFoundException();
 
-		return bank.get();
+		return client.get();
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable long id) {
-		bankRepository.deleteById(id);
+		clientRepository.deleteById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Bank bank) {
-		Bank saved = bankRepository.save(bank);
+	public ResponseEntity<Object> create(@RequestBody Client client) {
+		Client saved = clientRepository.save(client);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -60,16 +60,16 @@ public class BankResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
+	public ResponseEntity<Object> update(@RequestBody Client client, @PathVariable long id) {
 
-		Optional<Bank> bankOptional = bankRepository.findById(id);
-
-		if (!bankOptional.isPresent())
+		Optional<Client> clientOptional = clientRepository.findById(id);
+		
+		if (!clientOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		bank.setId(id);
+		client.setId(id);
 		
-		bankRepository.save(bank);
+		clientRepository.save(client);
 
 		return ResponseEntity.noContent().build();
 	}
