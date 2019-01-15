@@ -50,8 +50,15 @@ public class AgencyResource {
 	}
 
 	@PostMapping
-	public Agency create(@Valid @RequestBody Agency agency) {
-		return agencyRepository.save(agency);
+	public ResponseEntity<Object> create(@Valid @RequestBody Agency agency) {
+		Agency saved = agencyRepository.save(agency);
+		
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(saved.getId()).toUri();
+
+		return ResponseEntity.created(location).body(saved);
 	}
 
 	@PutMapping("/{id}")
@@ -66,6 +73,6 @@ public class AgencyResource {
 		
 		agencyRepository.save(agency);
 
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(agency);
 	}
 }

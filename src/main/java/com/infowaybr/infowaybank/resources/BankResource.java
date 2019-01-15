@@ -1,6 +1,5 @@
 package com.infowaybr.infowaybank.resources;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
 import com.infowaybr.infowaybank.models.Bank;
