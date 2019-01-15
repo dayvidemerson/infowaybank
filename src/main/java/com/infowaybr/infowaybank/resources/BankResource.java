@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,19 +50,12 @@ public class BankResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Bank bank) {
-		Bank saved = bankRepository.save(bank);
-
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(saved.getId()).toUri();
-
-		return ResponseEntity.created(location).build();
+	public Bank create(@Valid @RequestBody Bank bank) {
+		return bankRepository.save(bank);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Bank bank, @PathVariable long id) {
+	public ResponseEntity<Object> update(@Valid @RequestBody Bank bank, @PathVariable long id) {
 
 		Optional<Bank> bankOptional = bankRepository.findById(id);
 

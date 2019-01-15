@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,19 +50,12 @@ public class AgencyResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Agency agency) {
-		Agency saved = agencyRepository.save(agency);
-
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(saved.getId()).toUri();
-
-		return ResponseEntity.created(location).build();
+	public Agency create(@Valid @RequestBody Agency agency) {
+		return agencyRepository.save(agency);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Agency agency, @PathVariable long id) {
+	public ResponseEntity<Object> update(@Valid @RequestBody Agency agency, @PathVariable long id) {
 
 		Optional<Agency> agencyOptional = agencyRepository.findById(id);
 

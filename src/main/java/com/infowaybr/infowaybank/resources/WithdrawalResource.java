@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,7 +50,7 @@ public class WithdrawalResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Withdrawal withdrawal) {
+	public ResponseEntity<Object> create(@Valid @RequestBody Withdrawal withdrawal) {
 		Withdrawal saved = withdrawalRepository.save(withdrawal);
 
 		URI location = ServletUriComponentsBuilder
@@ -60,7 +62,7 @@ public class WithdrawalResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Withdrawal withdrawal, @PathVariable long id) {
+	public ResponseEntity<Object> update(@Valid @RequestBody Withdrawal withdrawal, @PathVariable long id) {
 
 		Optional<Withdrawal> withdrawalOptional = withdrawalRepository.findById(id);
 		

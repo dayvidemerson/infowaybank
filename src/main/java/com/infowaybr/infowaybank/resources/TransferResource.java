@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,7 +50,7 @@ public class TransferResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Transfer transfer) {
+	public ResponseEntity<Object> create(@Valid @RequestBody Transfer transfer) {
 		Transfer saved = transferRepository.save(transfer);
 
 		URI location = ServletUriComponentsBuilder
@@ -60,7 +62,7 @@ public class TransferResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Transfer transfer, @PathVariable long id) {
+	public ResponseEntity<Object> update(@Valid @RequestBody Transfer transfer, @PathVariable long id) {
 
 		Optional<Transfer> transferOptional = transferRepository.findById(id);
 		

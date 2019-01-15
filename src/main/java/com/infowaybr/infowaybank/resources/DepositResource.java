@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,7 +50,7 @@ public class DepositResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody Deposit deposit) {
+	public ResponseEntity<Object> create(@Valid @RequestBody Deposit deposit) {
 		Deposit saved = depositRepository.save(deposit);
 
 		URI location = ServletUriComponentsBuilder
@@ -60,7 +62,7 @@ public class DepositResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@RequestBody Deposit deposit, @PathVariable long id) {
+	public ResponseEntity<Object> update(@Valid @RequestBody Deposit deposit, @PathVariable long id) {
 
 		Optional<Deposit> depositOptional = depositRepository.findById(id);
 		
