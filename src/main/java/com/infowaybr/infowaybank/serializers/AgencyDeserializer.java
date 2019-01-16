@@ -37,7 +37,7 @@ public class AgencyDeserializer extends JsonDeserializer<Agency> {
 		agency.setComplement(jsonNode.get("complement").asText());
 		Long bankId = jsonNode.get("bank").asLong();
 		Optional<Bank> bank = bankRepository.findById(bankId);
-		if (bank.isPresent()) {			
+		if (bank.isPresent()) {
 			agency.setBank(bank.get());
 		} else {
 			throw new BankNotFoundException();

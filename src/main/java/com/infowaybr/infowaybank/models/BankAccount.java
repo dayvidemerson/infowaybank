@@ -16,7 +16,14 @@ import javax.validation.constraints.PositiveOrZero;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.infowaybr.infowaybank.serializers.BankAccountDeserializer;
+import com.infowaybr.infowaybank.serializers.BankAccountSerializer;
+
 @Entity
+@JsonSerialize(using = BankAccountSerializer.class)
+@JsonDeserialize(using = BankAccountDeserializer.class)
 public class BankAccount implements Serializable {
 
 	private static final long serialVersionUID = 8725366328269761166L;
@@ -55,8 +62,6 @@ public class BankAccount implements Serializable {
 		this.setPassword(password);
 		this.agency = agency;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -97,5 +102,13 @@ public class BankAccount implements Serializable {
 	public void setPassword(String password) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.password = passwordEncoder.encode(password);
+	}
+
+	public Agency getAgency() {
+		return agency;
+	}
+
+	public void setAgency(Agency agency) {
+		this.agency = agency;
 	}
 }
