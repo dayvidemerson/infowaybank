@@ -1,6 +1,7 @@
 package com.infowaybr.infowaybank.models;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -28,13 +30,13 @@ public class Agency implements Serializable {
 	private static final long serialVersionUID = 7782384712441871304L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@NotNull
 	@PositiveOrZero
 	private Integer digit;
-	
+
 	@NotNull
 	@PositiveOrZero
 	private Integer number;
@@ -43,12 +45,15 @@ public class Agency implements Serializable {
 	@JoinColumn(name = "bank_id")
 	private Bank bank;
 
+	@OneToMany(mappedBy = "agency")
+	private Set<BankAccount> bankAccounts;
+
 	@NotBlank
 	private String country;
 
 	@Length(min = 2, max = 2)
 	private String state;
-	
+
 	@NotBlank
 	private String city;
 
@@ -59,6 +64,23 @@ public class Agency implements Serializable {
 	private String street;
 
 	private String complement;
+
+	public Agency() {
+	}
+
+	public Agency(@NotNull @PositiveOrZero Integer digit, @NotNull @PositiveOrZero Integer number, Bank bank,
+			@NotBlank String country, @Length(min = 2, max = 2) String state, @NotBlank String city,
+			@NotBlank String district, @NotBlank String street) {
+		super();
+		this.digit = digit;
+		this.number = number;
+		this.bank = bank;
+		this.country = country;
+		this.state = state;
+		this.city = city;
+		this.district = district;
+		this.street = street;
+	}
 
 	public Long getId() {
 		return id;
@@ -138,5 +160,13 @@ public class Agency implements Serializable {
 
 	public void setComplement(String complement) {
 		this.complement = complement;
+	}
+
+	public Set<BankAccount> getBankAccounts() {
+		return bankAccounts;
+	}
+
+	public void setBankAccounts(Set<BankAccount> bankAccounts) {
+		this.bankAccounts = bankAccounts;
 	}
 }

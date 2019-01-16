@@ -17,8 +17,8 @@ public class Bank implements Serializable {
 	private static final long serialVersionUID = 7745206886300687410L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@NotNull
 	@NotBlank
@@ -26,6 +26,14 @@ public class Bank implements Serializable {
 
 	@OneToMany(mappedBy = "bank")
 	private Set<Agency> agencies;
+
+	public Bank() {
+	}
+
+	public Bank(@NotNull @NotBlank String name) {
+		super();
+		this.name = name;
+	}
 
 	public Long getId() {
 		return id;

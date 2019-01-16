@@ -24,11 +24,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infowaybr.infowaybank.models.Agency;
 import com.infowaybr.infowaybank.models.Bank;
+import com.infowaybr.infowaybank.models.BankAccount;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AgencyResourceTest {
+public class BankAccountResourceTest {
 
 	@Autowired
 	private MockMvc mvc;
@@ -39,9 +40,14 @@ public class AgencyResourceTest {
 	@MockBean
 	private AgencyResource agencyResource;
 
-	private final String URL = "/api/agencies";
+	@MockBean
+	private BankAccountResource bankAccountResource;
+
+	private final String URL = "/api/bank-accounts";
 
 	private Bank bank;
+
+	private Agency agency;
 
 	@Before
 	public void setUp() {
@@ -49,48 +55,54 @@ public class AgencyResourceTest {
 		bank.setId(1L);
 
 		given(bankResource.findById(bank.getId())).willReturn(bank);
+
+		agency = new Agency(1, 1232, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
+		agency.setId(1L);
+
+		given(agencyResource.findById(agency.getId())).willReturn(agency);
 	}
 
 	@Test
 	public void findAll() throws Exception {
-		Agency agency = new Agency(1, 1232, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
-		agency.setId(1L);
+		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
+		bankAccount.setId(1L);
 
-		List<Agency> agencies = new ArrayList<Agency>();
-		agencies.add(agency);
+		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 
-		given(agencyResource.findAll()).willReturn(agencies);
+		bankAccounts.add(bankAccount);
+
+		given(bankAccountResource.findAll()).willReturn(bankAccounts);
 
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL);
 		builder = builder.contentType(MediaType.APPLICATION_JSON);
 
 		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].digit", is(agency.getDigit())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].digit", is(bankAccount.getDigit())));
 	}
 
 	@Test
 	public void findById() throws Exception {
-		Agency agency = new Agency(1, 1232, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
-		agency.setId(1L);
+		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
+		bankAccount.setId(1L);
 
-		given(agencyResource.findById(agency.getId())).willReturn(agency);
+		given(bankAccountResource.findById(bankAccount.getId())).willReturn(bankAccount);
 
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL + "/" + agency.getId());
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL + "/" + bankAccount.getId());
 		builder = builder.contentType(MediaType.APPLICATION_JSON);
 
 		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("digit", is(agency.getDigit())));
+				.andExpect(MockMvcResultMatchers.jsonPath("digit", is(bankAccount.getDigit())));
 	}
 
 	@Test
 	public void create() throws Exception {
-		Agency agency = new Agency(1, 2222, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
+		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
 
-		given(agencyResource.create(agency)).willReturn(agency);
+		given(bankAccountResource.create(bankAccount)).willReturn(bankAccount);
 
 		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(agency);
+		String json = mapper.writeValueAsString(bankAccount);
 
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(URL);
 		builder = builder.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
@@ -100,17 +112,18 @@ public class AgencyResourceTest {
 
 	@Test
 	public void update() throws Exception {
-		Agency agency = new Agency(1, 1232, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
-		agency.setId(1L);
-
-		given(agencyResource.update(agency, agency.getId())).willReturn(agency);
+		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
+		bankAccount.setId(1L);
+		
+		given(bankAccountResource.update(bankAccount, bankAccount.getId())).willReturn(bankAccount);
 
 		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(agency);
+		String json = mapper.writeValueAsString(bankAccount);
 
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(URL + "/" + agency.getId());
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(URL + "/" + bankAccount.getId());
 		builder = builder.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
 
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 	}
+
 }
