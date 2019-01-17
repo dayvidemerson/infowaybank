@@ -18,6 +18,7 @@ import javax.validation.constraints.PositiveOrZero;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.infowaybr.infowaybank.serializers.BankAccountDeserializer;
@@ -37,6 +38,11 @@ public class BankAccount implements Serializable {
 	@NotNull
 	@NotBlank
 	private String owner;
+
+	@NotNull
+	@NotBlank
+	@JsonIgnore
+	private String username;
 
 	@PositiveOrZero
 	private Integer digit;
@@ -66,6 +72,7 @@ public class BankAccount implements Serializable {
 		this.number = number;
 		this.setPassword(password);
 		this.agency = agency;
+		generateUsername();
 	}
 
 	public Boolean checkPassword(String password) {
@@ -84,12 +91,25 @@ public class BankAccount implements Serializable {
 		return balance;
 	}
 
+	private void generateUsername() {
+		String bankId = this.agency.getBank().getId().toString();
+
+		String agency = this.agency.getNumber().toString();
+		agency += "-" + this.agency.getDigit().toString();
+
+		String accountNumber = this.number.toString();
+		accountNumber += "-" + this.digit.toString();
+
+		this.username = bankId + agency + accountNumber;
+	}
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+		generateUsername();
 	}
 
 	public String getOwner() {
@@ -100,12 +120,17 @@ public class BankAccount implements Serializable {
 		this.owner = owner;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
 	public Integer getDigit() {
 		return digit;
 	}
 
 	public void setDigit(Integer digit) {
 		this.digit = digit;
+		generateUsername();
 	}
 
 	public Integer getNumber() {
@@ -114,6 +139,7 @@ public class BankAccount implements Serializable {
 
 	public void setNumber(Integer number) {
 		this.number = number;
+		generateUsername();
 	}
 
 	public String getPassword() {
