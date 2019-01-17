@@ -29,13 +29,13 @@ public class BankResource {
 	private BankRepository bankRepository;
 
 	@GetMapping
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public List<Bank> findAll() {
 		return bankRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public Bank findById(@PathVariable Long id) {
 		Optional<Bank> bank = bankRepository.findById(id);
 
@@ -46,19 +46,19 @@ public class BankResource {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable long id) {
 		bankRepository.deleteById(id);
 	}
 
 	@PostMapping
-	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseStatus(HttpStatus.CREATED)
 	public Bank create(@Valid @RequestBody Bank bank) {
 		return bankRepository.save(bank);
 	}
 
 	@PutMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public Bank update(@Valid @RequestBody Bank bank, @PathVariable long id) {
 
 		Optional<Bank> bankOptional = bankRepository.findById(id);
@@ -68,6 +68,6 @@ public class BankResource {
 
 		bank.setId(id);
 
-		return bankRepository.save(bank); 
+		return bankRepository.save(bank);
 	}
 }

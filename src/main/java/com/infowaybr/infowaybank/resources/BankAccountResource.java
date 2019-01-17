@@ -19,7 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.infowaybr.infowaybank.exceptions.BankAccountNotFoundException;
 import com.infowaybr.infowaybank.models.BankAccount;
+import com.infowaybr.infowaybank.models.Deposit;
+import com.infowaybr.infowaybank.models.Transaction;
+import com.infowaybr.infowaybank.models.Withdrawal;
 import com.infowaybr.infowaybank.repositories.BankAccountRepository;
+import com.infowaybr.infowaybank.repositories.DepositRepository;
+import com.infowaybr.infowaybank.repositories.TransactionRepository;
+import com.infowaybr.infowaybank.repositories.WithdrawalRepository;
 
 @RestController
 @RequestMapping("/api/bank-accounts")
@@ -28,14 +34,23 @@ public class BankAccountResource {
 	@Autowired
 	private BankAccountRepository bankAccountRepository;
 
+	@Autowired
+	private DepositRepository depositRepository;
+
+	@Autowired
+	private WithdrawalRepository withdrawalRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
+
 	@GetMapping
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public List<BankAccount> findAll() {
 		return bankAccountRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public BankAccount findById(@PathVariable Long id) {
 		Optional<BankAccount> bankAccount = bankAccountRepository.findById(id);
 
@@ -46,19 +61,19 @@ public class BankAccountResource {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable long id) {
 		bankAccountRepository.deleteById(id);
 	}
 
 	@PostMapping
-	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseStatus(HttpStatus.CREATED)
 	public BankAccount create(@Valid @RequestBody BankAccount bankAccount) {
 		return bankAccountRepository.save(bankAccount);
 	}
 
 	@PutMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public BankAccount update(@Valid @RequestBody BankAccount bankAccount, @PathVariable long id) {
 
 		Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(id);
@@ -67,7 +82,33 @@ public class BankAccountResource {
 			throw new BankAccountNotFoundException();
 
 		bankAccount.setId(id);
-		
+
 		return bankAccountRepository.save(bankAccount);
+	}
+
+	@PostMapping("/{id}/deposits")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Deposit deposit(@Valid @RequestBody Deposit deposit, @PathVariable long id) {
+		deposit = depositRepository.save(deposit);
+		return deposit;
+	}
+
+	@PostMapping("/{id}/withdraws")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Withdrawal deposit(@Valid @RequestBody Withdrawal withdrawal, @PathVariable long id) {
+		withdrawal = withdrawalRepository.save(withdrawal);
+		return withdrawal;
+	}
+	
+	@GetMapping("/{id}/transactions")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Transaction> transactions(@PathVariable long id) {
+		Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(id);
+
+		if (!bankAccountOptional.isPresent()) {
+			throw new BankAccountNotFoundException();
+		}
+
+		return transactionRepository.findByBankAccount(bankAccountOptional.get());
 	}
 }

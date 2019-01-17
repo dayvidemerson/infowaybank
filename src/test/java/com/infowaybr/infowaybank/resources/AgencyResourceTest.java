@@ -47,8 +47,6 @@ public class AgencyResourceTest {
 	public void setUp() {
 		bank = new Bank("International Bank");
 		bank.setId(1L);
-
-		given(bankResource.findById(bank.getId())).willReturn(bank);
 	}
 
 	@Test

@@ -71,6 +71,8 @@ public class BankResourceTest {
 	public void create() throws Exception {
 		Bank bank = new Bank("National Bank");
 
+		given(bankResource.create(bank)).willReturn(bank);
+
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(bank);
 
@@ -85,7 +87,7 @@ public class BankResourceTest {
 		Bank bank = new Bank("National Bank");
 		bank.setId(1L);
 
-		given(bankResource.findById(bank.getId())).willReturn(bank);
+		given(bankResource.update(bank, bank.getId())).willReturn(bank);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(bank);

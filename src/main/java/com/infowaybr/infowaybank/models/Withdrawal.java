@@ -1,64 +1,35 @@
 package com.infowaybr.infowaybank.models;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.infowaybr.infowaybank.serializers.WithdrawalDeserializer;
+import com.infowaybr.infowaybank.serializers.WithdrawalSerializer;
 
 @Entity
-public class Withdrawal  implements Serializable {
+@JsonSerialize(using = WithdrawalSerializer.class)
+@JsonDeserialize(using = WithdrawalDeserializer.class)
+public class Withdrawal extends Transaction {
 
-	private static final long serialVersionUID = -579504565291731999L;
+	private static final long serialVersionUID = -1756813413552936219L;
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-	@Positive
-	private Double value;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date datetime;
-
-	@ManyToOne
-	private BankAccount bankAccount;
-
-	public Long getId() {
-		return id;
+	public Withdrawal() {
+		this.description = "Saque";
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Withdrawal(@NotNull Double value, BankAccount bankAccount) {
+		super();
+		this.setValue(value);
+		this.setBankAccount(bankAccount);
 	}
 
-	public Double getValue() {
-		return value;
-	}
-
+	@Override
 	public void setValue(Double value) {
-		this.value = value;
-	}
-
-	public Date getDatetime() {
-		return datetime;
-	}
-
-	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
-	}
-
-	public BankAccount getBankAccount() {
-		return bankAccount;
-	}
-
-	public void setBankAccount(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
+		if (value > 0) {
+			value *= -1;
+		}
+		super.setValue(value);
 	}
 }

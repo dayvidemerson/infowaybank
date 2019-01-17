@@ -1,6 +1,7 @@
 package com.infowaybr.infowaybank.models;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -50,6 +52,9 @@ public class BankAccount implements Serializable {
 	@JoinColumn(name = "agency_id")
 	private Agency agency;
 
+	@OneToMany(mappedBy = "bankAccount")
+	private Set<Transaction> transactions;
+
 	public BankAccount() {
 	}
 
@@ -61,6 +66,20 @@ public class BankAccount implements Serializable {
 		this.number = number;
 		this.setPassword(password);
 		this.agency = agency;
+	}
+
+	public Boolean checkPassword(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		password = passwordEncoder.encode(password);
+		return password.equals(this.password);
+	}
+
+	public Double getBalance() {
+		Double balance = 0.0;
+		for (Transaction transaction : transactions) {
+			balance += transaction.getValue();
+		}
+		return balance;
 	}
 
 	public Long getId() {
@@ -110,5 +129,13 @@ public class BankAccount implements Serializable {
 
 	public void setAgency(Agency agency) {
 		this.agency = agency;
+	}
+
+	public Set<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(Set<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 }

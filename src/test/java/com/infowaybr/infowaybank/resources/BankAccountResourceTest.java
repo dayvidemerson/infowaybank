@@ -54,12 +54,8 @@ public class BankAccountResourceTest {
 		bank = new Bank("International Bank");
 		bank.setId(1L);
 
-		given(bankResource.findById(bank.getId())).willReturn(bank);
-
 		agency = new Agency(1, 1232, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
 		agency.setId(1L);
-
-		given(agencyResource.findById(agency.getId())).willReturn(agency);
 	}
 
 	@Test

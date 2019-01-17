@@ -7,10 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Positive;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 public class Transfer implements Serializable {
@@ -21,17 +21,15 @@ public class Transfer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@Positive
-	private Double value;
-
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date datetime;
+	@CreatedDate
+	private Date created;
 
-	@ManyToOne
-	private BankAccount from;
+	@OneToOne
+	private Transaction from;
 
-	@ManyToOne
-	private BankAccount to;
+	@OneToOne
+	private Transaction to;
 
 	public Long getId() {
 		return id;
@@ -41,35 +39,23 @@ public class Transfer implements Serializable {
 		this.id = id;
 	}
 
-	public Double getValue() {
-		return value;
-	}
-
-	public void setValue(Double value) {
-		this.value = value;
-	}
-
-	public BankAccount getFrom() {
+	public Transaction getFrom() {
 		return from;
 	}
 
-	public void setFrom(BankAccount from) {
+	public void setFrom(Transaction from) {
 		this.from = from;
 	}
-	
-	public Date getDatetime() {
-		return datetime;
-	}
-	
-	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
-	}
 
-	public BankAccount getTo() {
+	public Transaction getTo() {
 		return to;
 	}
 
-	public void setTo(BankAccount to) {
+	public void setTo(Transaction to) {
 		this.to = to;
+	}
+	
+	public Date getCreated() {
+		return created;
 	}
 }

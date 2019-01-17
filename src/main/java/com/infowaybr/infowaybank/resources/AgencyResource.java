@@ -29,13 +29,13 @@ public class AgencyResource {
 	private AgencyRepository agencyRepository;
 
 	@GetMapping
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public List<Agency> findAll() {
 		return agencyRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public Agency findById(@PathVariable Long id) {
 		Optional<Agency> agency = agencyRepository.findById(id);
 
@@ -46,19 +46,19 @@ public class AgencyResource {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable long id) {
 		agencyRepository.deleteById(id);
 	}
 
 	@PostMapping
-	@ResponseStatus( HttpStatus.CREATED )
+	@ResponseStatus(HttpStatus.CREATED)
 	public Agency create(@Valid @RequestBody Agency agency) {
 		return agencyRepository.save(agency);
 	}
 
 	@PutMapping("/{id}")
-	@ResponseStatus( HttpStatus.OK )
+	@ResponseStatus(HttpStatus.OK)
 	public Agency update(@Valid @RequestBody Agency agency, @PathVariable long id) {
 
 		Optional<Agency> agencyOptional = agencyRepository.findById(id);
