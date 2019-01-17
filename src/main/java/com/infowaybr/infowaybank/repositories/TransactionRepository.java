@@ -9,6 +9,6 @@ import com.infowaybr.infowaybank.models.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 	
-	public List<Transaction> findByBankAccount(BankAccount bankAccount);
+	public List<Transaction> findByBankAccountOrderByCreatedDesc(BankAccount bankAccount);
 
 }

@@ -109,6 +109,6 @@ public class BankAccountResource {
 			throw new BankAccountNotFoundException();
 		}
 
-		return transactionRepository.findByBankAccount(bankAccountOptional.get());
+		return transactionRepository.findByBankAccountOrderByCreatedDesc(bankAccountOptional.get());
 	}
 }
