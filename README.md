@@ -17,9 +17,9 @@ no acesso de cada uma.
 Para segurança e isolamento do acesso dos dados de cada usuário, apesar de solicitado pelo desafio que a autenticação
 fosse feita via oAuth2, infelizmente me deparei com muitos problemas e dificuldades que podem ser vistos no histórico
 do controle de versão, por este motivo achei melhor seguir por outro caminho visto que eu poderia perder muito tempo
-e não concluir as outras tarefas, por este motivo optei por desenvolver utilizando autenticação via JWT, que difere em
-alguns poucos aspectos do oAuth2, mas atende a demanda e preenche o requisito para um token temporário e isolar as
-requisições sem afetar outras contas que estejam logadas.
+e não concluir as outras tarefas, por este motivo optei por desenvolver algo mais simples utilizando apenas um token
+temporário de 10 minutos via JWT, após expirado é necessário gerar um novo token e assim por diante, contudo apesar de
+mais simples mantêm as requisições isoladas e o token expira com o tempo, foi a solução parcial que encontrei a tempo.
 
 ## Tecnologias Utilizadas
 
