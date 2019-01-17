@@ -18,7 +18,6 @@ import javax.validation.constraints.PositiveOrZero;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.infowaybr.infowaybank.serializers.BankAccountDeserializer;
@@ -39,9 +38,6 @@ public class BankAccount implements Serializable {
 	@NotBlank
 	private String owner;
 
-	@NotNull
-	@NotBlank
-	@JsonIgnore
 	private String username;
 
 	@PositiveOrZero
@@ -92,15 +88,17 @@ public class BankAccount implements Serializable {
 	}
 
 	private void generateUsername() {
-		String bankId = this.agency.getBank().getId().toString();
-
-		String agency = this.agency.getNumber().toString();
-		agency += "-" + this.agency.getDigit().toString();
-
-		String accountNumber = this.number.toString();
-		accountNumber += "-" + this.digit.toString();
-
-		this.username = bankId + agency + accountNumber;
+		if (this.agency != null && this.number != null && this.digit != null) {			
+			String bank = this.agency.getBank().getId().toString();
+			
+			String agency = this.agency.getNumber().toString();
+			agency += "-" + this.agency.getDigit().toString();
+			
+			String account = this.number.toString();
+			account += "-" + this.digit.toString();
+			
+			this.username = bank + "-" + agency + "-" + account;
+		}
 	}
 
 	public Long getId() {
@@ -109,7 +107,6 @@ public class BankAccount implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-		generateUsername();
 	}
 
 	public String getOwner() {
@@ -157,6 +154,7 @@ public class BankAccount implements Serializable {
 
 	public void setAgency(Agency agency) {
 		this.agency = agency;
+		generateUsername();
 	}
 
 	public Set<Transaction> getTransactions() {

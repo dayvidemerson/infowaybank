@@ -3,6 +3,7 @@ package com.infowaybr.infowaybank.settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -64,7 +65,13 @@ public class WebSecuritySetting extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
         .authorizeRequests()
-            .antMatchers("/api/auth/**")
+        	.antMatchers("/api/banks")
+				.permitAll()
+			.antMatchers("/api/agencies")
+				.permitAll()
+        	.antMatchers(HttpMethod.POST, "/api/bank-accounts")
+        		.permitAll()
+        	.antMatchers("/api/auth/**")
                 .permitAll()
             .anyRequest()
                 .authenticated();
