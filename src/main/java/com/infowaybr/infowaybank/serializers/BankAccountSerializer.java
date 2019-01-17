@@ -22,6 +22,7 @@ public class BankAccountSerializer extends JsonSerializer<BankAccount> {
 		gen.writeNumberField("number", value.getNumber());
 		gen.writeStringField("password", value.getPassword());
 		gen.writeNumberField("agency", value.getAgency().getId());
+		gen.writeNumberField("balance", value.getBalance());
 		gen.writeEndObject();
 	}
 }
