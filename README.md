@@ -33,6 +33,8 @@ mais simples mantêm as requisições isoladas e o token expira com o tempo, foi
 
 **Senha:** rootroot
 
+**Nome do Banco de Dados:** infowaybank
+
 ### Interface de Acesso a API
 
 Enviarei os arquivos separados para acesso via web, esta sendo desenvolvido em Angular, porém como não serei avaliado

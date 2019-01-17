@@ -43,12 +43,6 @@ public class BankAccountResource {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
-	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<BankAccount> findAll() {
-		return bankAccountRepository.findAll();
-	}
-
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public BankAccount findById(@PathVariable Long id) {

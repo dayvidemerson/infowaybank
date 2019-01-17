@@ -1,11 +1,7 @@
 package com.infowaybr.infowaybank.resources;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -59,25 +56,7 @@ public class BankAccountResourceTest {
 	}
 
 	@Test
-	public void findAll() throws Exception {
-		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
-		bankAccount.setId(1L);
-
-		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
-
-		bankAccounts.add(bankAccount);
-
-		given(bankAccountResource.findAll()).willReturn(bankAccounts);
-
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL);
-		builder = builder.contentType(MediaType.APPLICATION_JSON);
-
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].digit", is(bankAccount.getDigit())));
-	}
-
-	@Test
+	@WithMockUser
 	public void findById() throws Exception {
 		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
 		bankAccount.setId(1L);
@@ -107,6 +86,7 @@ public class BankAccountResourceTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void update() throws Exception {
 		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
 		bankAccount.setId(1L);

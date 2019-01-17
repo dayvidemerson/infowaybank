@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -23,6 +25,7 @@ import com.infowaybr.infowaybank.models.Agency;
 import com.infowaybr.infowaybank.models.Bank;
 import com.infowaybr.infowaybank.models.BankAccount;
 import com.infowaybr.infowaybank.models.Withdrawal;
+import com.infowaybr.infowaybank.security.JwtTokenProvider;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,6 +34,12 @@ public class WithdrawalResourceTest {
 
 	@Autowired
 	private MockMvc mvc;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
+
+	@Autowired
+	JwtTokenProvider jwtTokenProvider;
 
 	@MockBean
 	private BankResource bankResource;
@@ -57,25 +66,28 @@ public class WithdrawalResourceTest {
 		bank = new Bank("International Bank");
 		bank.setId(1L);
 
-		agency = new Agency(1, 1232, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
+		agency = new Agency(1, 1111, bank, "Brasil", "PI", "Picos", "Bairro São José", "Rua Luis Nunes");
 		agency.setId(1L);
 
-		bankAccount = new BankAccount("Dayvid Emerson", 1, 1234, "123", agency);
+		bankAccount = new BankAccount("Dayvid Emerson", 1, 1111, "1234", agency);
 		bankAccount.setId(1L);
 	}
 
 	@Test
-	public void create() throws Exception {
+	@WithMockUser
+	public void whenBalanceIsInsufficient() throws Exception {
 		Withdrawal withdrawal = new Withdrawal(100.5, bankAccount);
 		withdrawal.setCreated(new Date());
-		
+
 		given(withdrawalResource.create(withdrawal)).willReturn(withdrawal);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(withdrawal);
+
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(URL);
 		builder = builder.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
 
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isCreated());
+		mvc.perform(builder)
+			.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 }
