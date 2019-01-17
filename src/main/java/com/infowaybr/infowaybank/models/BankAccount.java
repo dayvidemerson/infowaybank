@@ -76,8 +76,10 @@ public class BankAccount implements Serializable {
 
 	public Double getBalance() {
 		Double balance = 0.0;
-		for (Transaction transaction : transactions) {
-			balance += transaction.getValue();
+		if (transactions != null) {
+			for (Transaction transaction : transactions) {
+				balance += transaction.getValue();
+			}
 		}
 		return balance;
 	}
