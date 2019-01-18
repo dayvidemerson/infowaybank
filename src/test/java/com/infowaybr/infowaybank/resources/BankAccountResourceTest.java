@@ -69,21 +69,4 @@ public class BankAccountResourceTest {
 		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isCreated());
 	}
 
-	@Test
-	@WithMockUser
-	public void update() throws Exception {
-		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
-		bankAccount.setId(1L);
-		
-		given(bankAccountResource.update(bankAccount)).willReturn(bankAccount);
-
-		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(bankAccount);
-
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(URL);
-		builder = builder.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
-
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-	}
-
 }

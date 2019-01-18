@@ -24,7 +24,8 @@ mais simples mantêm as requisições isoladas e o token expira com o tempo, foi
 ## Tecnologias Utilizadas
 
 - Java v11.0.1
-- Spring v2.1.1
+- Spring Framework v5.0
+- Spring Boot v2.1.1
 - MySQL v.8.0.13
 
 ### Configuração do Banco de Dados
@@ -37,6 +38,4 @@ mais simples mantêm as requisições isoladas e o token expira com o tempo, foi
 
 ### Interface de Acesso a API
 
-Enviarei os arquivos separados para acesso via web, esta sendo desenvolvido em Angular, porém como não serei avaliado
-pelo frontend, ele estará disponível apenas na conclusão do desafio para não misturar os arquivos no GIT e dificultar
-a avaliação.
+GitHub: https://github.com/dayvidemerson/infowaybank-client
