@@ -4,12 +4,9 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.infowaybr.infowaybank.serializers.DepositDeserializer;
-import com.infowaybr.infowaybank.serializers.DepositSerializer;
 
 @Entity
-@JsonSerialize(using = DepositSerializer.class)
 @JsonDeserialize(using = DepositDeserializer.class)
 public class Deposit extends Transaction {
 

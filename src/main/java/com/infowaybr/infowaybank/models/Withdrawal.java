@@ -4,12 +4,9 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.infowaybr.infowaybank.serializers.WithdrawalDeserializer;
-import com.infowaybr.infowaybank.serializers.WithdrawalSerializer;
 
 @Entity
-@JsonSerialize(using = WithdrawalSerializer.class)
 @JsonDeserialize(using = WithdrawalDeserializer.class)
 public class Withdrawal extends Transaction {
 

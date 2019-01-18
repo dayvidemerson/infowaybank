@@ -18,7 +18,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.infowaybr.infowaybank.serializers.TransactionSerializer;
+
 @Entity
+@JsonSerialize(using = TransactionSerializer.class)
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Transaction implements Serializable {
