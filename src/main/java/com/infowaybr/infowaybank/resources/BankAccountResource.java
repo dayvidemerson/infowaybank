@@ -22,11 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 import com.infowaybr.infowaybank.models.BankAccount;
 import com.infowaybr.infowaybank.models.Deposit;
 import com.infowaybr.infowaybank.models.Transaction;
+import com.infowaybr.infowaybank.models.Transfer;
 import com.infowaybr.infowaybank.models.Withdrawal;
 import com.infowaybr.infowaybank.payloads.TransferRequest;
 import com.infowaybr.infowaybank.repositories.BankAccountRepository;
 import com.infowaybr.infowaybank.repositories.DepositRepository;
 import com.infowaybr.infowaybank.repositories.TransactionRepository;
+import com.infowaybr.infowaybank.repositories.TransferRepository;
 import com.infowaybr.infowaybank.repositories.WithdrawalRepository;
 import com.infowaybr.infowaybank.security.CustomUserDetails;
 
@@ -42,6 +44,9 @@ public class BankAccountResource {
 
 	@Autowired
 	private WithdrawalRepository withdrawalRepository;
+
+	@Autowired
+	private TransferRepository transferRepository;
 
 	@Autowired
 	private TransactionRepository transactionRepository;
@@ -118,7 +123,7 @@ public class BankAccountResource {
 
 	@PostMapping("/transfers")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Transaction> tranfer(@Valid @RequestBody TransferRequest transferRequest) {
+	public Transfer tranfer(@Valid @RequestBody TransferRequest transferRequest) {
 		Optional<BankAccount> fromBankAccountOptional = getBankAccountLogged();
 
 		if (fromBankAccountOptional.isPresent()) {
@@ -142,8 +147,13 @@ public class BankAccountResource {
 
 				transactions.add(transactionRepository.save(fromTransaction));
 				transactions.add(transactionRepository.save(toTransaction));
-				
-				return transactions;
+
+				Transfer transfer = new Transfer();
+
+				transfer.setFrom(fromTransaction);
+				transfer.setTo(toTransaction);
+
+				return transferRepository.save(transfer);
 			}
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Conta bancária de destino não existe.");
 		}

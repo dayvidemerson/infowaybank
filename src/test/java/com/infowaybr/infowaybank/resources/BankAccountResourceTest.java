@@ -1,6 +1,5 @@
 package com.infowaybr.infowaybank.resources;
 
-import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 
 import org.junit.Before;
@@ -56,21 +55,6 @@ public class BankAccountResourceTest {
 	}
 
 	@Test
-	@WithMockUser
-	public void findById() throws Exception {
-		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
-		bankAccount.setId(1L);
-
-		given(bankAccountResource.findById(bankAccount.getId())).willReturn(bankAccount);
-
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL + "/" + bankAccount.getId());
-		builder = builder.contentType(MediaType.APPLICATION_JSON);
-
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("digit", is(bankAccount.getDigit())));
-	}
-
-	@Test
 	public void create() throws Exception {
 		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
 
@@ -91,12 +75,12 @@ public class BankAccountResourceTest {
 		BankAccount bankAccount = new BankAccount("Dayvid Emerson", 1, 3234, "1234", agency);
 		bankAccount.setId(1L);
 		
-		given(bankAccountResource.update(bankAccount, bankAccount.getId())).willReturn(bankAccount);
+		given(bankAccountResource.update(bankAccount)).willReturn(bankAccount);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(bankAccount);
 
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(URL + "/" + bankAccount.getId());
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(URL);
 		builder = builder.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
 
 		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
