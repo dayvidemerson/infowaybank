@@ -82,6 +82,10 @@ public class Agency implements Serializable {
 		this.street = street;
 	}
 
+	public String getCode() {
+		return number.toString() + "-" + digit.toString();
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.infowaybr.infowaybank.exceptions.AgencyNotFoundException;
 import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
@@ -69,6 +70,7 @@ public class AgencyResource {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Agency create(@Valid @RequestBody Agency agency) {
+		checkAgencyExists(agency);
 		return agencyRepository.save(agency);
 	}
 
@@ -83,6 +85,19 @@ public class AgencyResource {
 
 		agency.setId(id);
 
+		if (!agency.getCode().equals(agencyOptional.get().getCode())) {
+			checkAgencyExists(agency);
+		}
+
 		return agencyRepository.save(agency);
+	}
+
+	private void checkAgencyExists(Agency agency) {
+		Bank bank = agency.getBank();
+		for (Agency agencyCheck : bank.getAgencies()) {
+			if (agency.getCode().equals(agencyCheck.getCode())) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Número indisponível para registro de agência.");
+			}
+		}
 	}
 }
