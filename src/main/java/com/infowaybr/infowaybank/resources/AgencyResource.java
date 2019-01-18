@@ -14,23 +14,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.infowaybr.infowaybank.exceptions.AgencyNotFoundException;
+import com.infowaybr.infowaybank.exceptions.BankNotFoundException;
 import com.infowaybr.infowaybank.models.Agency;
+import com.infowaybr.infowaybank.models.Bank;
 import com.infowaybr.infowaybank.repositories.AgencyRepository;
+import com.infowaybr.infowaybank.repositories.BankRepository;
 
 @RestController
 @RequestMapping("/api/agencies")
 public class AgencyResource {
 
 	@Autowired
+	private BankRepository bankRepository;
+
+	@Autowired
 	private AgencyRepository agencyRepository;
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<Agency> findAll() {
+	public List<Agency> findAll(@RequestParam(name = "bank", required = false) Long bankId) {
+		if (bankId != null) {
+			Optional<Bank> bankOptional = bankRepository.findById(bankId);
+			if (bankOptional.isPresent()) {
+				return bankOptional.get().getAgencies();
+			} else {
+				throw new BankNotFoundException();
+			}
+		}
 		return agencyRepository.findAll();
 	}
 

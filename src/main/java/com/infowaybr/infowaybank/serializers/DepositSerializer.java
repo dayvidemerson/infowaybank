@@ -20,10 +20,10 @@ public class DepositSerializer extends JsonSerializer<Deposit> {
 		}
 
 		gen.writeNumberField("value", value.getValue());
-		gen.writeNumberField("bankAccount", value.getBankAccount().getId());
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String created = dateFormat.format(value.getCreated());
 		gen.writeStringField("created", created);
+
 		gen.writeEndObject();
 	}
 

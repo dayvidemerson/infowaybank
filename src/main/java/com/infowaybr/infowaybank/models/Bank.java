@@ -1,7 +1,7 @@
 package com.infowaybr.infowaybank.models;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +25,7 @@ public class Bank implements Serializable {
 	private String name;
 
 	@OneToMany(mappedBy = "bank")
-	private Set<Agency> agencies;
+	private List<Agency> agencies;
 
 	public Bank() {
 	}
@@ -51,11 +51,11 @@ public class Bank implements Serializable {
 		this.name = name;
 	}
 
-	public Set<Agency> getAgencies() {
+	public List<Agency> getAgencies() {
 		return agencies;
 	}
 
-	public void setAgencies(Set<Agency> agencies) {
+	public void setAgencies(List<Agency> agencies) {
 		this.agencies = agencies;
 	}
 }

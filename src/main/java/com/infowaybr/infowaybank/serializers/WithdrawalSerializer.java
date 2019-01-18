@@ -15,12 +15,11 @@ public class WithdrawalSerializer extends JsonSerializer<Withdrawal> {
 	public void serialize(Withdrawal value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
 		
-		if (value.getId() != null) {			
+		if (value.getId() != null) {
 			gen.writeNumberField("id", value.getId());
 		}
 
 		gen.writeNumberField("value", value.getValue());
-		gen.writeNumberField("bankAccount", value.getBankAccount().getId());
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String created = dateFormat.format(value.getCreated());
 		gen.writeStringField("created", created);

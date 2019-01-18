@@ -57,7 +57,7 @@ public class AgencyResourceTest {
 		List<Agency> agencies = new ArrayList<Agency>();
 		agencies.add(agency);
 
-		given(agencyResource.findAll()).willReturn(agencies);
+		given(agencyResource.findAll(null)).willReturn(agencies);
 
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL);
 		builder = builder.contentType(MediaType.APPLICATION_JSON);
@@ -77,8 +77,7 @@ public class AgencyResourceTest {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(URL + "/" + agency.getId());
 		builder = builder.contentType(MediaType.APPLICATION_JSON);
 
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("digit", is(agency.getDigit())));
+		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test

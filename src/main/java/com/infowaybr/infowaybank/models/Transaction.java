@@ -43,6 +43,13 @@ public class Transaction implements Serializable {
 	@ManyToOne
 	private BankAccount bankAccount;
 
+	public Transaction() {
+	}
+
+	public Transaction(@NotNull @NotBlank String description) {
+		this.description = description;
+	}
+
 	public Long getId() {
 		return id;
 	}
