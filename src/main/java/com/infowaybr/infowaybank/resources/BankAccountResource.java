@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -66,20 +65,8 @@ public class BankAccountResource {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public BankAccount create(@Valid @RequestBody BankAccount bankAccount) {
+		checkBankAccountExists(bankAccount);
 		return bankAccountRepository.save(bankAccount);
-	}
-
-	@PutMapping
-	@ResponseStatus(HttpStatus.OK)
-	public BankAccount update(@Valid @RequestBody BankAccount bankAccount) {
-		Optional<BankAccount> bankAccountOptional = getBankAccountLogged();
-
-		if (bankAccountOptional.isPresent()) {
-			bankAccount.setId(bankAccountOptional.get().getId());
-			return bankAccountRepository.save(bankAccount);
-			
-		}
-		throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 	}
 
 	@PostMapping("/deposits")
@@ -101,7 +88,7 @@ public class BankAccountResource {
 
 		if (bankAccountOptional.isPresent()) {
 			BankAccount bankAccount = bankAccountOptional.get();
-			if (bankAccount.getBalance() <  withdrawal.getValue()) {
+			if (bankAccount.getBalance() <  withdrawal.getValue() * -1) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo Insuficiente");
 			}
 			withdrawal.setBankAccount(bankAccount);
@@ -164,5 +151,12 @@ public class BankAccountResource {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
 		return bankAccountRepository.findByUsername(username);
+	}
+
+	private void checkBankAccountExists(BankAccount bankAccount) {
+		Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByUsername(bankAccount.getUsername());
+		if (bankAccountOptional.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Número indisponível para registro de conta.");
+		}
 	}
 }
